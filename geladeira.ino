@@ -28,11 +28,11 @@ void loop() {
 void enviarIR(int botao){
   if(botao == 1){
     //Sinal para avançar
-    irsend.sendNEC(0xBD30CF, 32);
+    irsend.sendNEC(0xFD8A75, 32);
     delay(1000);
   }else if (botao == 2){
     //Sinal para retroceder
-    irsend.sendNEC(0xBD08F7, 32);
+    irsend.sendNEC(0xFD0AF5, 32);
     delay(1000);
   }
 }
