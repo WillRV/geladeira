@@ -44,10 +44,10 @@ void loop() {
     delay(6000);
   }
   
-  if (LDR() > 150){
+  if (LDR() > 240){
     //A porta da geladeira abriu
     while(1){ //Entra em um loop infinito, e só contará quando fizer o movimento completo da porta (abrir e fechar)
-      if(LDR() < 150){
+      if(LDR() < 240){
         pessoasQueAbriram = pessoasQueAbriram + 1;
         lcd.clear();
         lcd.setCursor(0, 0);
@@ -61,57 +61,19 @@ void loop() {
 
 void enviarIR(int botao){
   if(botao == 1){ //Video da chamada
-    
-    long tempoAnterior = millis();
     //Sinal para avançar
     irsend.sendNEC(0xFD8A75, 32);
     
-    //Mostrando no LCD que está sendo reproduzido o video 2
     lcd.clear();
     lcd.print("Reproduzindo 2");
     lcd.setCursor(0, 1);
     lcd.print("Chamada");
-
-    while(1){
-      
-    //delay(16000); //Segundos do vídeo da chamada
-    if((millis() - tempoAnterior) > 16000){
-      irsend.sendNEC(0xFD0AF5, 32); //Voltar video para o institucional
-      lcd.clear();
-      lcd.print(String("Doacoes: ") + String(pessoasQueAbriram));
-      break;
-    }
-
-    if (LDR() > 150){
-      //A porta da geladeira abriu
-      irsend.sendNEC(0xFD0AF5, 32); //Voltar video para o institucional
-      while(1){ //Entra em um loop infinito, e só contará quando fizer o movimento completo da porta (abrir e fechar)
-        if(LDR() < 150){
-          pessoasQueAbriram = pessoasQueAbriram + 1;
-          lcd.clear();
-          lcd.setCursor(0, 0);
-          lcd.print(String("Doacoes: ") + String(pessoasQueAbriram));
-          
-          //Vai para o agradecimento
-          //Avançar 2 vezes para o agradecimento
-            irsend.sendNEC(0xFD8A75, 32);
-            lcd.clear();
-            lcd.print("Reproduzindo 3");
-            lcd.setCursor(0, 1);
-            lcd.print("Agradecimento");
-            delay(250);
-            irsend.sendNEC(0xFD8A75, 32);
-            delay (11000); //Tempo do video de agradecimento
-            irsend.sendNEC(0xFD0AF5, 32);
-            delay(250);
-            irsend.sendNEC(0xFD0AF5, 32);
-            lcd.clear();
-            lcd.print(String("Doacoes: ") + String(pessoasQueAbriram));
-          break;
-        }
-      }
-    }
-  }
+    
+    delay(16000); //Segundos do vídeo da chamada
+    irsend.sendNEC(0xFD0AF5, 32); //Voltar video para o estático
+    lcd.clear();
+    lcd.print(String("Doacoes: ") + String(pessoasQueAbriram));
+    
   }else if (botao == 2){
     //Sinal para retroceder
     irsend.sendNEC(0xFD0AF5, 32);
